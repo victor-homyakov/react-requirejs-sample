@@ -24,7 +24,7 @@ if [ "$files" != "" ]; then
 
         if ${jshint} && ! ${jsx_template}; then
             config=pre-commit.jshintrc
-            result=$(./hooks/node_modules/.bin/jshint --config ./hooks/${config} ${file})
+            result=$(./node_modules/.bin/jshint --config ./hooks/${config} ${file})
             if [ "$result" != "" ]; then
                 echo "$result"
                 pass=false
@@ -32,7 +32,7 @@ if [ "$files" != "" ]; then
         fi
 
         if ${eslint}; then
-            result=$(./hooks/node_modules/.bin/eslint --rulesdir ./hooks/eslint_rules --config ./hooks/pre-commit.eslintrc ${file})
+            result=$(./node_modules/.bin/eslint --rulesdir ./hooks/eslint_rules --config ./hooks/pre-commit.eslintrc ${file})
 
             if ${jsx_template}; then
                 result="${result/  error  Unexpected token \</  skip  JSX token}"

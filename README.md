@@ -10,3 +10,9 @@ App installation
 - `npm install -g eslint`
 - `cd hooks` then run `create-links.cmd` as administrator
 - `yo webapp`
+
+After checkout
+--------------
+
+- `npm install`
+- `bower install`
