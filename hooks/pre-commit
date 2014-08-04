@@ -1,0 +1,76 @@
+#!/bin/sh
+
+# Tested vith git sh version 3.1
+# JSHint and ESLint validation
+# - JSHint ignores files with ReactJS JSX markup (files containing `render()`)
+# - ESLint ignores `Unexpected token` errors in JSX markup
+
+echo "Running JavaScript validation before commit..."
+
+files=$(git diff --cached --name-only --diff-filter=ACMR -- *.js **/*.js)
+pass=true
+jshint=true
+eslint=true
+
+if [ "$files" != "" ]; then
+    for file in ${files}; do
+        #echo "${file}"
+
+        jsx_template=false
+        file_content=$(cat "${file}")
+        if [[ ${file_content} == *" render: function"*" return "*\<*/*\>* ]]; then
+            jsx_template=true
+        fi
+
+        if ${jshint} && ! ${jsx_template}; then
+            config=pre-commit.jshintrc
+            result=$(./hooks/node_modules/.bin/jshint --config ./hooks/${config} ${file})
+            if [ "$result" != "" ]; then
+                echo "$result"
+                pass=false
+            fi
+        fi
+
+        if ${eslint}; then
+            result=$(./hooks/node_modules/.bin/eslint --rulesdir ./hooks/eslint_rules --config ./hooks/pre-commit.eslintrc ${file})
+
+            if ${jsx_template}; then
+                result="${result/  error  Unexpected token \</  skip  JSX token}"
+                result="${result/token* 1 problem/token}"
+            fi
+
+            case "$result" in
+                *" problems"* )
+                    echo ""
+                    echo "$result"
+                    pass=false
+                    echo "ESLint: problems found"
+                    ;;
+                *"  error  "* )
+                    echo ""
+                    echo "$result"
+                    pass=false
+                    echo "ESLint: errors found"
+                    ;;
+                *"  warning  "* )
+                    echo ""
+                    echo "$result"
+                    echo "ESLint: just one warning found"
+                    ;;
+                * )
+                    #echo ""
+                    #echo "$result"
+                    #echo "ESLint: looks good"
+                    ;;
+            esac
+        fi
+    done
+fi
+
+if ${pass}; then
+    exit 0
+else
+    echo ""
+    echo "JavaScript validation failed. Please fix errors and try committing again."
+    exit 1
+fi
