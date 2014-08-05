@@ -8,7 +8,7 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var doctrine = require("doctrine");
+var doctrine = require("../node_modules/eslint/node_modules/doctrine/doctrine");
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -118,9 +118,9 @@ module.exports = function(context) {
                                 context.report(jsdocNode, "Missing JSDoc return type.");
                             }
 
-                            if (tag.type.name !== "void" && !tag.description) {
+                            /*if (tag.type.name !== "void" && !tag.description) {
                                 context.report(jsdocNode, "Missing JSDoc return description.");
-                            }
+                            }*/
                         }
 
                         break;
