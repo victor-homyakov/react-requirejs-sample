@@ -1,5 +1,5 @@
 // Generated on 2014-08-04 using generator-webapp 0.4.9
-'use strict';
+/*global module*/
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -7,10 +7,12 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
+    'use strict';
 
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
+    grunt.loadNpmTasks('grunt-requirejs');
 
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
@@ -29,10 +31,6 @@ module.exports = function (grunt) {
 
         // Watches files for changes and runs tasks based on the changed files
         watch: {
-            bower: {
-                files: ['bower.json'],
-                tasks: ['bowerInstall']
-            },
             js: {
                 files: ['<%= config.app %>/scripts/{,*/}*.js'],
                 tasks: ['jshint'],
@@ -108,14 +106,16 @@ module.exports = function (grunt) {
         // Empties folders to start fresh
         clean: {
             dist: {
-                files: [{
-                    dot: true,
-                    src: [
-                        '.tmp',
-                        '<%= config.dist %>/*',
-                        '!<%= config.dist %>/.git*'
-                    ]
-                }]
+                files: [
+                    {
+                        dot: true,
+                        src: [
+                            '.tmp',
+                            '<%= config.dist %>/*',
+                            '!<%= config.dist %>/.git*'
+                        ]
+                    }
+                ]
             },
             server: '.tmp'
         },
@@ -150,20 +150,14 @@ module.exports = function (grunt) {
                 browsers: ['last 1 version']
             },
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '.tmp/styles/',
-                    src: '{,*/}*.css',
-                    dest: '.tmp/styles/'
-                }]
-            }
-        },
-
-        // Automatically inject Bower components into the HTML file
-        bowerInstall: {
-            app: {
-                src: ['<%= config.app %>/index.html'],
-                exclude: ['bower_components/bootstrap/dist/js/bootstrap.js']
+                files: [
+                    {
+                        expand: true,
+                        cwd: '.tmp/styles/',
+                        src: '{,*/}*.css',
+                        dest: '.tmp/styles/'
+                    }
+                ]
             }
         },
 
@@ -204,23 +198,27 @@ module.exports = function (grunt) {
         // The following *-min tasks produce minified files in the dist folder
         imagemin: {
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.app %>/images',
-                    src: '{,*/}*.{gif,jpeg,jpg,png}',
-                    dest: '<%= config.dist %>/images'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= config.app %>/images',
+                        src: '{,*/}*.{gif,jpeg,jpg,png}',
+                        dest: '<%= config.dist %>/images'
+                    }
+                ]
             }
         },
 
         svgmin: {
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.app %>/images',
-                    src: '{,*/}*.svg',
-                    dest: '<%= config.dist %>/images'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= config.app %>/images',
+                        src: '{,*/}*.svg',
+                        dest: '<%= config.dist %>/images'
+                    }
+                ]
             }
         },
 
@@ -236,12 +234,14 @@ module.exports = function (grunt) {
                     removeRedundantAttributes: true,
                     useShortDoctype: true
                 },
-                files: [{
-                    expand: true,
-                    cwd: '<%= config.dist %>',
-                    src: '{,*/}*.html',
-                    dest: '<%= config.dist %>'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= config.dist %>',
+                        src: '{,*/}*.html',
+                        dest: '<%= config.dist %>'
+                    }
+                ]
             }
         },
 
@@ -271,22 +271,36 @@ module.exports = function (grunt) {
         //     dist: {}
         // },
 
+        requirejs: {
+            dist: {
+                options: {
+                    baseUrl: '<%= config.app %>/scripts/',
+                    name: 'main',
+                    mainConfigFile: '<%= config.app %>/scripts/main.js',
+                    out: '.tmp/concat/scripts/main.js',
+                    useStrict: true
+                }
+            }
+        },
+
         // Copies remaining files to places other tasks can use
         copy: {
             dist: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: '<%= config.app %>',
-                    dest: '<%= config.dist %>',
-                    src: [
-                        '*.{ico,png,txt}',
-                        '.htaccess',
-                        'images/{,*/}*.webp',
-                        '{,*/}*.html',
-                        'styles/fonts/{,*/}*.*'
-                    ]
-                }]
+                files: [
+                    {
+                        expand: true,
+                        dot: true,
+                        cwd: '<%= config.app %>',
+                        dest: '<%= config.dist %>',
+                        src: [
+                            '*.{ico,png,txt}',
+                            '.htaccess',
+                            'images/{,*/}*.webp',
+                            '{,*/}*.html',
+                            'styles/fonts/{,*/}*.*'
+                        ]
+                    }
+                ]
             },
             styles: {
                 expand: true,
@@ -314,7 +328,7 @@ module.exports = function (grunt) {
     });
 
 
-    grunt.registerTask('serve', function (target) {
+    grunt.registerTask('serve', function(target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -328,12 +342,12 @@ module.exports = function (grunt) {
         ]);
     });
 
-    grunt.registerTask('server', function (target) {
+    grunt.registerTask('server', function(target) {
         grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
         grunt.task.run([target ? ('serve:' + target) : 'serve']);
     });
 
-    grunt.registerTask('test', function (target) {
+    grunt.registerTask('test', function(target) {
         if (target !== 'watch') {
             grunt.task.run([
                 'clean:server',
@@ -354,6 +368,7 @@ module.exports = function (grunt) {
         'concurrent:dist',
         'autoprefixer',
         'concat',
+        'requirejs:dist',
         'cssmin',
         'uglify',
         'copy:dist',
