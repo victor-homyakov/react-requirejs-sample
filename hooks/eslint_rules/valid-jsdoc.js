@@ -1,3 +1,6 @@
+/*global module*/
+/*jshint globalstrict:true, quotmark:double, maxlen:140, maxcomplexity:12 */
+/*eslint no-global-strict:0, quotes:[2,"double"], max-len:[1,140,4], complexity:[1,12] */
 /**
  * @fileoverview Validates JSDoc comments are syntactically correct
  * @author Nicholas C. Zakas
@@ -8,7 +11,7 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var doctrine = require("../node_modules/eslint/node_modules/doctrine/doctrine");
+var doctrine = require("../../node_modules/doctrine/doctrine");
 
 //------------------------------------------------------------------------------
 // Rule Definition

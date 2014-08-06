@@ -8,9 +8,14 @@ App creation
 
 - `npm install -g yo`
 - `npm install -g generator-webapp`
-- `npm install -g jshint`
-- `npm install -g eslint`
 - `yo webapp`
+
+Pre-commit hook
+---------------
+- `npm install -g jshint`
+- `npm install -g jsxhint`
+- `npm install -g eslint`
+- `npm install doctrine --save-dev`
 
 RequireJS
 ---------

@@ -32,7 +32,7 @@ module.exports = function(grunt) {
         // Watches files for changes and runs tasks based on the changed files
         watch: {
             js: {
-                files: ['<%= config.app %>/scripts/{,*/}*.js'],
+                files: ['<%= config.app %>/scripts/{,*/}*.js', '<%= config.app %>/scripts/{,*/}*.jsx'],
                 tasks: ['jshint'],
                 options: {
                     livereload: true
@@ -126,12 +126,22 @@ module.exports = function(grunt) {
                 jshintrc: '.jshintrc',
                 reporter: require('jshint-stylish')
             },
-            all: [
+            js: [
                 'Gruntfile.js',
                 '<%= config.app %>/scripts/{,*/}*.js',
                 '!<%= config.app %>/scripts/vendor/*',
                 'test/spec/{,*/}*.js'
-            ]
+            ],
+            jsx: {
+                options: {
+                    jshintrc: 'jsx.jshintrc'
+                },
+                files: {
+                    src: [
+                        '<%= config.app %>/scripts/{,*/}*.jsx'
+                    ]
+                }
+            }
         },
 
         // Mocha testing framework configuration options

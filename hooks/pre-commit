@@ -7,14 +7,14 @@
 
 echo "Running JavaScript validation before commit..."
 
-files=$(git diff --cached --name-only --diff-filter=ACMR -- *.js **/*.js)
+files=$(git diff --cached --name-only --diff-filter=ACMR -- *.js *.jsx **/*.js **/*.jsx)
 pass=true
 jshint=true
 eslint=true
 
 if [ "$files" != "" ]; then
     for file in ${files}; do
-        #echo "${file}"
+        echo "${file}"
 
         jsx_template=false
         file_content=$(cat "${file}")
@@ -22,9 +22,13 @@ if [ "$files" != "" ]; then
             jsx_template=true
         fi
 
-        if ${jshint} && ! ${jsx_template}; then
-            config=pre-commit.jshintrc
-            result=$(./node_modules/.bin/jshint --config ./hooks/${config} ${file})
+        if ${jshint}; then
+            if ${jsx_template}; then
+                config=pre-commit.jsx.jshintrc
+            else
+                config=pre-commit.jshintrc
+            fi
+            result=$(jsxhint --config ./hooks/${config} ${file})
             if [ "$result" != "" ]; then
                 echo "$result"
                 pass=false
@@ -32,7 +36,7 @@ if [ "$files" != "" ]; then
         fi
 
         if ${eslint}; then
-            result=$(./node_modules/.bin/eslint --rulesdir ./hooks/eslint_rules --config ./hooks/pre-commit.eslintrc ${file})
+            result=$(eslint --rulesdir ./hooks/eslint_rules --config ./hooks/pre-commit.eslintrc ${file})
 
             if ${jsx_template}; then
                 result="${result/  error  Unexpected token \</  skip  JSX token}"
