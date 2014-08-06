@@ -287,8 +287,15 @@ module.exports = function(grunt) {
                     baseUrl: '<%= config.app %>/scripts/',
                     name: 'main',
                     mainConfigFile: '<%= config.app %>/scripts/main.js',
+                    paths: {
+                        react: '../../bower_components/react/react-with-addons.min'
+                    },
+                    exclude: ['JSXTransformer', 'jsx'],
                     out: '.tmp/concat/scripts/main.js',
-                    useStrict: true
+                    useStrict: true,
+                    onBuildWrite: function(moduleName, path, singleContents) {
+                        return singleContents.replace(/jsx!/g, '');
+                    }
                 }
             }
         },

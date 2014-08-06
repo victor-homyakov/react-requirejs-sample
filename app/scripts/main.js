@@ -4,8 +4,15 @@ console.log('main.js loaded');
 require.config({
     baseUrl: 'scripts',
     paths: {
-        'jquery': '../../bower_components/jquery/dist/jquery',
-        'underscore': '../../bower_components/underscore/underscore'
+        jquery: '../../bower_components/jquery/dist/jquery',
+        underscore: '../../bower_components/underscore/underscore',
+        react: '../../bower_components/react/react-with-addons',
+        text: 'vendor/text',
+        jsx: 'vendor/jsx',
+        JSXTransformer: 'vendor/JSXTransformer'
+    },
+    jsx: {
+        fileExtension: '.jsx'
     },
     shim: {
         'jquery': {
@@ -19,10 +26,7 @@ require.config({
     }
 });
 
-require(['jquery', 'underscore'], function($, _) {
+require(['react', 'jsx!root'], function(React, root) {
     'use strict';
-    $('#log')
-        .empty()
-        .append('<p>jQuery ' + $.fn.jquery + ' is loaded</p>')
-        .append('<p>Underscore ' + _.VERSION + ' is loaded</p>');
+    React.renderComponent(root(), document.getElementById('root'));
 });

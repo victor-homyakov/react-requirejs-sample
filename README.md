@@ -26,6 +26,14 @@ RequireJS
 - Gruntfile.js - `grunt.loadNpmTasks('grunt-requirejs');`, add `requirejs` task
 - Gruntfile.js - disable bowerInstall
 
+React
+-----
+- `bower install react --save`
+- download and install https://github.com/philix/jsx-requirejs-plugin
+- add paths to `require.config()` in main.js and Gruntfile.js
+- Gruntfile.js - modify watch, requirejs tasks
+- `npm install grunt-jsxhint --save-dev`
+
 After checkout
 --------------
 
